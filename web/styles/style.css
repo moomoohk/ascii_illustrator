@@ -1,0 +1,51 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    padding: 100px;
+}
+
+table {
+    border-spacing: 0;
+}
+
+table#mainGrid {
+    height: 300px;
+    width: 300px;
+}
+
+table.subGrid {
+    height: 100%;
+    width: 100%;
+}
+
+div.mainGridCell {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    text-align: center;
+    outline: solid black 1px;
+}
+
+span.mainGridCellText {
+    position: absolute;
+    pointer-events: none;
+    font-family: monospace;
+    font-size: 55px;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+div.pixel {
+    height: 100%;
+    width: 100%;
+}
