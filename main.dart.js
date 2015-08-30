@@ -784,6 +784,17 @@ var dart = [
         throw H.wrapException(P.ArgumentError$(other));
       return receiver + other;
     },
+    $mod: function(receiver, other) {
+      var result = receiver % other;
+      if (result === 0)
+        return 0;
+      if (result > 0)
+        return result;
+      if (other < 0)
+        return result - other;
+      else
+        return result + other;
+    },
     _tdivFast$1: function(receiver, other) {
       return (receiver | 0) === receiver ? receiver / other | 0 : this.toInt$0(receiver / other);
     },
@@ -3480,9 +3491,9 @@ var dart = [
     mainGrid = document.createElement("table", null);
     mainGrid.id = "mainGrid";
     mainGridBody = J.createTBody$0$x(mainGrid);
-    for (t1 = J.getInterceptor$x(mainGridBody), i = 1; i <= 5; ++i) {
+    for (t1 = J.getInterceptor$x(mainGridBody), i = 1; i <= $.mainDimension; ++i) {
       mainGridRow = t1.insertRow$1(mainGridBody, 0);
-      for (t2 = J.getInterceptor$x(mainGridRow), j = 1; j <= 5; ++j) {
+      for (t2 = J.getInterceptor$x(mainGridRow), j = 1; j <= $.mainDimension; ++j) {
         mainGridCell = t2.insertCell$1(mainGridRow, 0);
         mainGridCellContainer = document.createElement("div", null);
         mainGridCellContainer.className = "mainGridCell";
@@ -3512,13 +3523,94 @@ var dart = [
         t3.get$children(mainGridCellContainer).add$1(0, subGrid);
       }
     }
-    J.get$children$x(document.querySelector("body")).add$1(0, mainGrid);
+    t1 = J.get$children$x(document.querySelector("body"));
+    t1.add$1(0, mainGrid);
+    t1.add$1(0, $.get$output());
     t1 = new W._FrozenElementList(document.querySelectorAll("div.pixel"));
     H.setRuntimeTypeInfo(new W._ElementListEventStreamImpl(t1, false, "mouseenter"), [null]).listen$1(new F.generateGrid_closure());
-    H.setRuntimeTypeInfo(new W._ElementListEventStreamImpl(t1, false, "click"), [null]).listen$1(new F.generateGrid_closure0());
-    H.setRuntimeTypeInfo(new W._ElementListEventStreamImpl(t1, false, "dragenter"), [null]).listen$1(new F.generateGrid_closure1());
-    H.setRuntimeTypeInfo(new W._ElementListEventStreamImpl(t1, false, "drag"), [null]).listen$1(new F.generateGrid_closure2());
-    H.setRuntimeTypeInfo(new W._ElementListEventStreamImpl(new W._FrozenElementList(document.querySelectorAll("div.mainGridCell")), false, "mouseleave"), [null]).listen$1(new F.generateGrid_closure3());
+    H.setRuntimeTypeInfo(new W._ElementListEventStreamImpl(t1, false, "mouseleave"), [null]).listen$1(new F.generateGrid_closure0());
+    H.setRuntimeTypeInfo(new W._ElementListEventStreamImpl(t1, false, "click"), [null]).listen$1(new F.generateGrid_closure1());
+    H.setRuntimeTypeInfo(new W._ElementListEventStreamImpl(t1, false, "dragenter"), [null]).listen$1(new F.generateGrid_closure2());
+    H.setRuntimeTypeInfo(new W._ElementListEventStreamImpl(t1, false, "drag"), [null]).listen$1(new F.generateGrid_closure3());
+    H.setRuntimeTypeInfo(new W._ElementListEventStreamImpl(new W._FrozenElementList(document.querySelectorAll("div.mainGridCell")), false, "mouseleave"), [null]).listen$1(new F.generateGrid_closure4());
+  },
+  resolveChar: function(container) {
+    var map, rows, t1, hasSet, t2, pixel, t3, text, x, y, found, m;
+    map = H.setRuntimeTypeInfo([], [P.bool]);
+    rows = J.get$children$x(container.querySelector("table > tbody"));
+    for (t1 = rows.get$iterator(rows), hasSet = false; t1.moveNext$0();)
+      for (t2 = J.get$iterator$ax(J.get$children$x(t1.__interceptors$_current)); t2.moveNext$0();) {
+        pixel = J.querySelector$1$x(t2.get$current(), "div.pixel");
+        t3 = J.getInterceptor$x(pixel);
+        map.push(t3.get$classes(pixel).contains$1(0, "marked") || t3.get$classes(pixel).contains$1(0, "set"));
+        if (t3.get$classes(pixel).contains$1(0, "set"))
+          hasSet = true;
+      }
+    text = H.interceptedTypeCast(container.querySelector("span.mainGridCellText"), "$isSpanElement");
+    t1 = J.get$children$x(container.parentElement.parentElement);
+    x = t1.indexOf$1(t1, container.parentElement);
+    t1 = J.get$children$x(container.parentElement.parentElement.parentElement);
+    y = t1.indexOf$1(t1, container.parentElement.parentElement);
+    for (t1 = new J.ArrayIterator($.get$maps(), 16, 0, null), found = false; t1.moveNext$0();) {
+      m = t1.__interceptors$_current;
+      if (m.check$1(map)) {
+        text.textContent = m.$char;
+        W._MultiElementCssClassSet__MultiElementCssClassSet(new W._FrozenElementList(container.querySelectorAll("div.marked"))).add$1(0, "set");
+        t2 = $.get$markedMaps();
+        t3 = x + y * $.mainDimension;
+        if (t3 < 0 || t3 >= t2.length)
+          return H.ioore(t2, t3);
+        t2[t3] = m;
+        hasSet = true;
+        found = true;
+      }
+    }
+    if (hasSet)
+      t1 = !found;
+    else
+      t1 = true;
+    if (t1) {
+      t1 = $.get$markedMaps();
+      t2 = x + y * $.mainDimension;
+      if (t2 < 0 || t2 >= t1.length)
+        return H.ioore(t1, t2);
+      t1[t2] = null;
+      text.textContent = "";
+      if (hasSet) {
+        W._MultiElementCssClassSet__MultiElementCssClassSet(new W._FrozenElementList(container.querySelectorAll("div.set"))).remove$1(0, "set");
+        F.resolveChar(container);
+      }
+    }
+    F.generateAscii();
+  },
+  generateAscii: function() {
+    var i, t1, m, t2, t3;
+    $.get$output().textContent = "";
+    for (i = 0; t1 = $.get$markedMaps(), i < t1.length;) {
+      m = t1[i];
+      if (m != null) {
+        t1 = $.get$output();
+        t2 = t1.textContent;
+        t3 = m.$char;
+        if (t2 == null)
+          return t2.$add();
+        t1.textContent = t2 + t3;
+      } else {
+        t1 = $.get$output();
+        t2 = t1.textContent;
+        if (t2 == null)
+          return t2.$add();
+        t1.textContent = t2 + " ";
+      }
+      ++i;
+      if (C.JSInt_methods.$mod(i, $.mainDimension) === 0) {
+        t1 = $.get$output();
+        t2 = t1.textContent;
+        if (t2 == null)
+          return t2.$add();
+        t1.textContent = t2 + "\n";
+      }
+    }
   },
   PixelMap: {
     "^": "Object;_variations,$char",
@@ -3630,47 +3722,46 @@ var dart = [
   generateGrid_closure0: {
     "^": "Closure:5;",
     call$1: function(me) {
-      var target, list, t1;
-      target = H.interceptedTypeCast(J.get$target$x(me), "$isDivElement");
-      list = target.classList;
-      list.contains("marked");
-      list.remove("marked");
-      t1 = target.style;
-      t1.backgroundColor = "initial";
+      F.resolveChar(H.interceptedTypeCast(J.get$target$x(me), "$isDivElement").parentElement.parentElement.parentElement.parentElement.parentElement);
     }
   },
   generateGrid_closure1: {
     "^": "Closure:5;",
     call$1: function(me) {
-      P.print("drag enter");
+      var target, list, t1;
+      target = H.interceptedTypeCast(J.get$target$x(me), "$isDivElement");
+      list = target.classList;
+      list.contains("set");
+      list.remove("set");
+      list = target.classList;
+      list.contains("marked");
+      list.remove("marked");
+      t1 = target.style;
+      t1.backgroundColor = "initial";
+      F.resolveChar(target.parentElement.parentElement.parentElement.parentElement.parentElement);
     }
   },
   generateGrid_closure2: {
     "^": "Closure:5;",
     call$1: function(me) {
-      P.print("drag");
+      P.print("drag enter");
     }
   },
   generateGrid_closure3: {
     "^": "Closure:5;",
     call$1: function(me) {
-      var target, map, rows, t1, t2, m;
+      P.print("drag");
+    }
+  },
+  generateGrid_closure4: {
+    "^": "Closure:5;",
+    call$1: function(me) {
+      var target, t1;
       target = H.interceptedTypeCast(J.get$target$x(me), "$isDivElement");
-      map = H.setRuntimeTypeInfo([], [P.bool]);
-      rows = J.get$children$x(target.querySelector("table > tbody"));
-      for (t1 = rows.get$iterator(rows); t1.moveNext$0();)
-        for (t2 = J.get$iterator$ax(J.get$children$x(t1.__interceptors$_current)); t2.moveNext$0();)
-          map.push(J.get$classes$x(J.querySelector$1$x(t2.get$current(), "div.pixel")).contains$1(0, "marked"));
-      for (t1 = new J.ArrayIterator($.get$maps(), 15, 0, null); t1.moveNext$0();) {
-        m = t1.__interceptors$_current;
-        if (m.check$1(map)) {
-          target.querySelector("span.mainGridCellText").textContent = m.$char;
-          W._MultiElementCssClassSet__MultiElementCssClassSet(new W._FrozenElementList(target.querySelectorAll("div.marked"))).add$1(0, "set");
-        }
-      }
       t1 = new W._FrozenElementList(target.querySelectorAll("div.marked:not(.set)"));
       W._MultiElementCssClassSet__MultiElementCssClassSet(t1).remove$1(0, "marked");
       W._CssStyleDeclarationSet$(t1)._setAll$2("backgroundColor", "initial");
+      F.resolveChar(target);
     }
   }
 },
@@ -6146,6 +6237,18 @@ var dart = [
         for (i = 0; i < $length; ++i)
           this.$indexSet(receiver, start + i, t1.$index(iterable, skipCount + i));
     }],
+    indexOf$2: function(receiver, element, startIndex) {
+      var i;
+      if (startIndex >= this.get$length(receiver))
+        return -1;
+      for (i = startIndex; i < this.get$length(receiver); ++i)
+        if (J.$eq(this.$index(receiver, i), element))
+          return i;
+      return -1;
+    },
+    indexOf$1: function($receiver, element) {
+      return this.indexOf$2($receiver, element, 0);
+    },
     toString$0: function(receiver) {
       return P.IterableBase_iterableToFullString(receiver, "[", "]");
     },
@@ -6770,6 +6873,9 @@ var dart = [
 }],
 ["dart.dom.html", "dart:html", , W, {
   "^": "",
+  document: function() {
+    return document;
+  },
   _ElementFactoryProvider_createElement_tag: function(tag, typeExtension) {
     return document.createElement(tag);
   },
@@ -6807,7 +6913,7 @@ var dart = [
     $isElement: 1,
     $isNode: 1,
     $isObject: 1,
-    "%": "HTMLAppletElement|HTMLBRElement|HTMLButtonElement|HTMLCanvasElement|HTMLContentElement|HTMLDListElement|HTMLDataListElement|HTMLDetailsElement|HTMLDialogElement|HTMLDirectoryElement|HTMLEmbedElement|HTMLFieldSetElement|HTMLFontElement|HTMLFrameElement|HTMLHRElement|HTMLHeadElement|HTMLHeadingElement|HTMLHtmlElement|HTMLIFrameElement|HTMLImageElement|HTMLKeygenElement|HTMLLIElement|HTMLLabelElement|HTMLLegendElement|HTMLLinkElement|HTMLMapElement|HTMLMarqueeElement|HTMLMenuElement|HTMLMenuItemElement|HTMLMetaElement|HTMLMeterElement|HTMLModElement|HTMLOListElement|HTMLObjectElement|HTMLOptGroupElement|HTMLOptionElement|HTMLOutputElement|HTMLParagraphElement|HTMLParamElement|HTMLPictureElement|HTMLPreElement|HTMLProgressElement|HTMLQuoteElement|HTMLScriptElement|HTMLShadowElement|HTMLSourceElement|HTMLSpanElement|HTMLStyleElement|HTMLTableCaptionElement|HTMLTableCellElement|HTMLTableColElement|HTMLTableDataCellElement|HTMLTableHeaderCellElement|HTMLTemplateElement|HTMLTextAreaElement|HTMLTitleElement|HTMLTrackElement|HTMLUListElement|HTMLUnknownElement;HTMLElement"
+    "%": "HTMLAppletElement|HTMLBRElement|HTMLButtonElement|HTMLCanvasElement|HTMLContentElement|HTMLDListElement|HTMLDataListElement|HTMLDetailsElement|HTMLDialogElement|HTMLDirectoryElement|HTMLEmbedElement|HTMLFieldSetElement|HTMLFontElement|HTMLFrameElement|HTMLHRElement|HTMLHeadElement|HTMLHeadingElement|HTMLHtmlElement|HTMLIFrameElement|HTMLImageElement|HTMLKeygenElement|HTMLLIElement|HTMLLabelElement|HTMLLegendElement|HTMLLinkElement|HTMLMapElement|HTMLMarqueeElement|HTMLMenuElement|HTMLMenuItemElement|HTMLMetaElement|HTMLMeterElement|HTMLModElement|HTMLOListElement|HTMLObjectElement|HTMLOptGroupElement|HTMLOptionElement|HTMLOutputElement|HTMLParagraphElement|HTMLParamElement|HTMLPictureElement|HTMLPreElement|HTMLProgressElement|HTMLQuoteElement|HTMLScriptElement|HTMLShadowElement|HTMLSourceElement|HTMLStyleElement|HTMLTableCaptionElement|HTMLTableCellElement|HTMLTableColElement|HTMLTableDataCellElement|HTMLTableHeaderCellElement|HTMLTemplateElement|HTMLTextAreaElement|HTMLTitleElement|HTMLTrackElement|HTMLUListElement|HTMLUnknownElement;HTMLElement"
   },
   AnchorElement: {
     "^": "HtmlElement;target=",
@@ -6885,7 +6991,13 @@ var dart = [
     querySelector$1: function(receiver, selectors) {
       return receiver.querySelector(selectors);
     },
-    "%": "Document|HTMLDocument|XMLDocument"
+    createElement$2: function(receiver, tagName, typeExtension) {
+      return receiver.createElement(tagName, typeExtension);
+    },
+    createElement$1: function($receiver, tagName) {
+      return this.createElement$2($receiver, tagName, null);
+    },
+    "%": "XMLDocument;Document"
   },
   DocumentFragment: {
     "^": "Node;",
@@ -7128,6 +7240,10 @@ var dart = [
     },
     $isEfficientLength: 1
   },
+  HtmlDocument: {
+    "^": "Document;",
+    "%": "HTMLDocument"
+  },
   InputElement: {
     "^": "HtmlElement;",
     $isElement: 1,
@@ -7269,6 +7385,11 @@ var dart = [
   SelectElement: {
     "^": "HtmlElement;length=",
     "%": "HTMLSelectElement"
+  },
+  SpanElement: {
+    "^": "HtmlElement;",
+    $isSpanElement: 1,
+    "%": "HTMLSpanElement"
   },
   SpeechRecognitionError: {
     "^": "Event;error=",
@@ -7469,9 +7590,9 @@ var dart = [
     }
   },
   _MultiElementCssClassSet_remove_closure: {
-    "^": "Closure:18;_captured_value_0",
+    "^": "Closure:18;_html$_captured_value_0",
     call$2: function(changed, e) {
-      return J.remove$1$ax(e, this._captured_value_0) === true || changed === true;
+      return J.remove$1$ax(e, this._html$_captured_value_0) === true || changed === true;
     }
   },
   _ElementCssClassSet: {
@@ -8280,9 +8401,9 @@ var dart = [
     $isEfficientLength: 1
   },
   CssClassSetImpl_add_closure: {
-    "^": "Closure:2;_html_common$_captured_value_0",
+    "^": "Closure:2;_captured_value_0",
     call$1: function(s) {
-      return s.add$1(0, this._html_common$_captured_value_0);
+      return s.add$1(0, this._captured_value_0);
     }
   },
   FilteredElementList: {
@@ -8526,6 +8647,7 @@ J.toString$0 = function(receiver) {
 J.trim$0$s = function(receiver) {
   return J.getInterceptor$s(receiver).trim$0(receiver);
 };
+C.HtmlDocument_methods = W.HtmlDocument.prototype;
 C.JSArray_methods = J.JSArray.prototype;
 C.JSInt_methods = J.JSInt.prototype;
 C.JSString_methods = J.JSString.prototype;
@@ -8701,6 +8823,7 @@ $.dispatchRecordsForInstanceTags = null;
 $.interceptorsForUncacheableTags = null;
 $.initNativeDispatchFlag = null;
 $.dimension = 5;
+$.mainDimension = 6;
 $.printToZone = null;
 $._nextCallback = null;
 $._lastCallback = null;
@@ -8792,7 +8915,9 @@ $.Device__cachedCssPrefix = null;
   return F.PixelMap$([false, false, false, false, false, true, true, true, true, true, false, false, false, false, false, true, true, true, true, true, false, false, false, false, false], "=");
 }, "equals", "swastika", "get$swastika", function() {
   return F.PixelMap$([true, false, true, true, true, true, false, true, false, false, true, true, true, true, true, false, false, true, false, true, true, true, true, false, true], "\u5350");
-}, "swastika", "plus", "get$plus", function() {
+}, "swastika", "O", "get$O", function() {
+  return F.PixelMap$variations([[false, true, true, true, false, true, true, false, true, true, true, false, false, false, true, true, true, false, true, true, false, true, true, true, false], [false, true, true, true, false, true, false, false, false, true, true, false, false, false, true, true, false, false, false, true, false, true, true, true, false]], "O");
+}, "O", "plus", "get$plus", function() {
   return $.get$pipe().combine$2($.get$dash(), "+");
 }, "plus", "plusMinus", "get$plusMinus", function() {
   return $.get$plus().combine$2($.get$underscore(), "\u00b1");
@@ -8805,8 +8930,15 @@ $.Device__cachedCssPrefix = null;
 }, "x", "T", "get$T", function() {
   return $.get$topBar().combine$2($.get$pipe(), "T");
 }, "T", "maps", "get$maps", function() {
-  return [$.get$slash(), $.get$dash(), $.get$equals(), $.get$underscore(), $.get$pipe(), $.get$topBar(), $.get$plus(), $.get$plusMinus(), $.get$l(), $.get$x(), $.get$T(), $.get$swastika(), $.get$notEquals(), $.get$backSlash(), F.PixelMap$([true, true, true, true, true, true, false, false, false, true, true, false, false, false, true, true, false, false, false, true, true, true, true, true, true], "\u25a1")];
-}, "maps", "_AsyncRun_scheduleImmediateClosure", "get$_AsyncRun_scheduleImmediateClosure", function() {
+  return [$.get$slash(), $.get$dash(), $.get$equals(), $.get$underscore(), $.get$pipe(), $.get$topBar(), $.get$plus(), $.get$plusMinus(), $.get$l(), $.get$x(), $.get$T(), $.get$O(), $.get$swastika(), $.get$notEquals(), $.get$backSlash(), F.PixelMap$([true, true, true, true, true, true, false, false, false, true, true, false, false, false, true, true, false, false, false, true, true, true, true, true, true], "\u25a1")];
+}, "maps", "markedMaps", "get$markedMaps", function() {
+  var t1 = $.mainDimension;
+  return H.setRuntimeTypeInfo(Array(t1 * t1), [F.PixelMap]);
+}, "markedMaps", "output", "get$output", function() {
+  var t1 = C.HtmlDocument_methods.createElement$1(W.document(), "textarea");
+  t1.id = "output";
+  return t1;
+}, "output", "_AsyncRun_scheduleImmediateClosure", "get$_AsyncRun_scheduleImmediateClosure", function() {
   return P._AsyncRun__initializeScheduleImmediate();
 }, "scheduleImmediateClosure", "IterableBase__toStringVisiting", "get$IterableBase__toStringVisiting", function() {
   return [];
