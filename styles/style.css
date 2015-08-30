@@ -19,6 +19,8 @@ table {
 table#mainGrid {
     height: 300px;
     width: 300px;
+    display: inline-table;
+    margin: 10px;
 }
 
 table.subGrid {
@@ -39,6 +41,7 @@ span.mainGridCellText {
     pointer-events: none;
     font-family: monospace;
     font-size: 55px;
+    line-height: 100%;
     left: 0;
     right: 0;
     top: 0;
@@ -48,4 +51,15 @@ span.mainGridCellText {
 div.pixel {
     height: 100%;
     width: 100%;
+}
+
+div.pixel.set {
+    outline: solid black 1px;
+}
+
+textarea#output {
+    font-family: monospace;
+    height: 200px;
+    width: 200px;
+    margin: 10px;
 }

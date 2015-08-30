@@ -84,6 +84,13 @@ PixelMap O = new PixelMap.variations([[
 	true,  false, false, false, true,
 	false, true,  true,  true,  false
 ]], "O");
+PixelMap H = new PixelMap([
+	true,  false, false, false, true,
+	true,  false, false, false, true,
+	true,  true,  true,  true,  true,
+	true,  false, false, false, true,
+	true,  false, false, false, true
+], "H");
 PixelMap plus = pipe.combine(dash, "+");
 PixelMap plusMinus = plus.combine(underscore, "±");
 PixelMap notEquals = equals.combine(slash, "≠");
@@ -103,6 +110,7 @@ List<PixelMap> maps = [
 	l,
 	x,
 	T,
+	O,
 	swastika,
 	notEquals,
 	backSlash,
