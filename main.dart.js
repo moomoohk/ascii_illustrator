@@ -1385,7 +1385,7 @@ var dart = [
       if (t1 != null)
         t1.clear$0(0);
       for (t1 = this.ports, t2 = t1.get$values(t1), t2 = H.setRuntimeTypeInfo(new H.MappedIterator(null, J.get$iterator$ax(t2._iterable), t2._f), [H.getTypeArgumentByIndex(t2, 0), H.getTypeArgumentByIndex(t2, 1)]); t2.moveNext$0();)
-        t2._current.__isolate_helper$_close$0();
+        t2.__internal$_current.__isolate_helper$_close$0();
       t1.clear$0(0);
       this.weakPorts.clear$0(0);
       init.globalState.isolates.remove$1(0, this.id);
@@ -3705,6 +3705,20 @@ var dart = [
         return new F.PixelMap(maps, $char);
       }}
   },
+  closure: {
+    "^": "Closure:5;",
+    call$1: function(e) {
+      J.preventDefault$0$x(e);
+      J.select$0$x($.get$output());
+    }
+  },
+  closure0: {
+    "^": "Closure:2;",
+    call$1: function(_) {
+      if ($.get$output().textContent.length > 0)
+        ;
+    }
+  },
   generateGrid_closure: {
     "^": "Closure:5;",
     call$1: function(me) {
@@ -3815,23 +3829,23 @@ var dart = [
     $isEfficientLength: 1
   },
   ListIterator: {
-    "^": "Object;_iterable,_length,_index,_current",
+    "^": "Object;_iterable,__internal$_length,_index,__internal$_current",
     get$current: function() {
-      return this._current;
+      return this.__internal$_current;
     },
     moveNext$0: function() {
       var t1, t2, $length, t3;
       t1 = this._iterable;
       t2 = J.getInterceptor$asx(t1);
       $length = t2.get$length(t1);
-      if (this._length !== $length)
+      if (this.__internal$_length !== $length)
         throw H.wrapException(P.ConcurrentModificationError$(t1));
       t3 = this._index;
       if (t3 >= $length) {
-        this._current = null;
+        this.__internal$_current = null;
         return false;
       }
-      this._current = t2.elementAt$1(t1, t3);
+      this.__internal$_current = t2.elementAt$1(t1, t3);
       ++this._index;
       return true;
     }
@@ -3860,18 +3874,18 @@ var dart = [
     $isEfficientLength: 1
   },
   MappedIterator: {
-    "^": "Iterator;_current,_iterator,_f",
+    "^": "Iterator;__internal$_current,_iterator,_f",
     moveNext$0: function() {
       var t1 = this._iterator;
       if (t1.moveNext$0()) {
-        this._current = this._f$1(t1.get$current());
+        this.__internal$_current = this._f$1(t1.get$current());
         return true;
       }
-      this._current = null;
+      this.__internal$_current = null;
       return false;
     },
     get$current: function() {
-      return this._current;
+      return this.__internal$_current;
     },
     _f$1: function(arg0) {
       return this._f.call$1(arg0);
@@ -6913,7 +6927,7 @@ var dart = [
     $isElement: 1,
     $isNode: 1,
     $isObject: 1,
-    "%": "HTMLAppletElement|HTMLBRElement|HTMLButtonElement|HTMLCanvasElement|HTMLContentElement|HTMLDListElement|HTMLDataListElement|HTMLDetailsElement|HTMLDialogElement|HTMLDirectoryElement|HTMLEmbedElement|HTMLFieldSetElement|HTMLFontElement|HTMLFrameElement|HTMLHRElement|HTMLHeadElement|HTMLHeadingElement|HTMLHtmlElement|HTMLIFrameElement|HTMLImageElement|HTMLKeygenElement|HTMLLIElement|HTMLLabelElement|HTMLLegendElement|HTMLLinkElement|HTMLMapElement|HTMLMarqueeElement|HTMLMenuElement|HTMLMenuItemElement|HTMLMetaElement|HTMLMeterElement|HTMLModElement|HTMLOListElement|HTMLObjectElement|HTMLOptGroupElement|HTMLOptionElement|HTMLOutputElement|HTMLParagraphElement|HTMLParamElement|HTMLPictureElement|HTMLPreElement|HTMLProgressElement|HTMLQuoteElement|HTMLScriptElement|HTMLShadowElement|HTMLSourceElement|HTMLStyleElement|HTMLTableCaptionElement|HTMLTableCellElement|HTMLTableColElement|HTMLTableDataCellElement|HTMLTableHeaderCellElement|HTMLTemplateElement|HTMLTextAreaElement|HTMLTitleElement|HTMLTrackElement|HTMLUListElement|HTMLUnknownElement;HTMLElement"
+    "%": "HTMLAppletElement|HTMLBRElement|HTMLButtonElement|HTMLCanvasElement|HTMLDListElement|HTMLDataListElement|HTMLDetailsElement|HTMLDialogElement|HTMLDirectoryElement|HTMLEmbedElement|HTMLFieldSetElement|HTMLFontElement|HTMLFrameElement|HTMLHRElement|HTMLHeadElement|HTMLHeadingElement|HTMLHtmlElement|HTMLIFrameElement|HTMLImageElement|HTMLKeygenElement|HTMLLIElement|HTMLLabelElement|HTMLLegendElement|HTMLLinkElement|HTMLMapElement|HTMLMarqueeElement|HTMLMenuElement|HTMLMenuItemElement|HTMLMetaElement|HTMLMeterElement|HTMLModElement|HTMLOListElement|HTMLObjectElement|HTMLOptGroupElement|HTMLOptionElement|HTMLOutputElement|HTMLParagraphElement|HTMLParamElement|HTMLPictureElement|HTMLPreElement|HTMLProgressElement|HTMLQuoteElement|HTMLScriptElement|HTMLShadowElement|HTMLSourceElement|HTMLStyleElement|HTMLTableCaptionElement|HTMLTableCellElement|HTMLTableColElement|HTMLTableDataCellElement|HTMLTableHeaderCellElement|HTMLTemplateElement|HTMLTitleElement|HTMLTrackElement|HTMLUListElement|HTMLUnknownElement;HTMLElement"
   },
   AnchorElement: {
     "^": "HtmlElement;target=",
@@ -6946,6 +6960,13 @@ var dart = [
     $isInterceptor: 1,
     "%": "CDATASection|Comment|Text;CharacterData"
   },
+  ContentElement: {
+    "^": "HtmlElement;",
+    select$0: function($receiver) {
+      return $receiver.select.call$0();
+    },
+    "%": "HTMLContentElement"
+  },
   CssStyleDeclaration: {
     "^": "Interceptor_CssStyleDeclarationBase;length=",
     "%": "CSS2Properties|CSSStyleDeclaration|MSStyleCSSProperties"
@@ -6958,7 +6979,7 @@ var dart = [
     _setAll$2: function(propertyName, value) {
       var t1;
       for (t1 = this._elementIterable, t1 = t1.get$iterator(t1); t1.moveNext$0();)
-        t1._current.style[propertyName] = value;
+        t1.__internal$_current.style[propertyName] = value;
     },
     _CssStyleDeclarationSet$1: function(_elementIterable) {
       this._elementCssStyleDeclarationSetIterable = H.setRuntimeTypeInfo(new H.MappedListIterable(P.List_List$from(this._elementIterable, true, null), new W._CssStyleDeclarationSet_closure()), [null, null]);
@@ -7153,6 +7174,9 @@ var dart = [
     querySelector$1: function(receiver, selectors) {
       return receiver.querySelector(selectors);
     },
+    get$onMouseDown: function(receiver) {
+      return H.setRuntimeTypeInfo(new W._ElementEventStreamImpl(receiver, "mousedown", false), [null]);
+    },
     $isElement: 1,
     $isNode: 1,
     $isObject: 1,
@@ -7169,6 +7193,10 @@ var dart = [
     get$target: function(receiver) {
       return W._convertNativeToDart_EventTarget(receiver.target);
     },
+    preventDefault$0: function(receiver) {
+      return receiver.preventDefault();
+    },
+    $isObject: 1,
     "%": "AnimationPlayerEvent|ApplicationCacheErrorEvent|AudioProcessingEvent|AutocompleteErrorEvent|BeforeUnloadEvent|CloseEvent|CustomEvent|DeviceLightEvent|DeviceMotionEvent|DeviceOrientationEvent|ExtendableEvent|FetchEvent|FontFaceSetLoadEvent|GamepadEvent|HashChangeEvent|IDBVersionChangeEvent|InstallEvent|MIDIConnectionEvent|MIDIMessageEvent|MediaKeyEvent|MediaKeyMessageEvent|MediaKeyNeededEvent|MediaQueryListEvent|MediaStreamEvent|MediaStreamTrackEvent|MessageEvent|MutationEvent|OfflineAudioCompletionEvent|OverflowEvent|PageTransitionEvent|PopStateEvent|ProgressEvent|PushEvent|RTCDTMFToneChangeEvent|RTCDataChannelEvent|RTCIceCandidateEvent|RTCPeerConnectionIceEvent|RelatedEvent|ResourceProgressEvent|SecurityPolicyViolationEvent|SpeechRecognitionEvent|SpeechSynthesisEvent|StorageEvent|TrackEvent|TransitionEvent|WebGLContextEvent|WebKitAnimationEvent|WebKitTransitionEvent|XMLHttpRequestProgressEvent;ClipboardEvent|Event|InputEvent"
   },
   EventTarget: {
@@ -7245,7 +7273,10 @@ var dart = [
     "%": "HTMLDocument"
   },
   InputElement: {
-    "^": "HtmlElement;",
+    "^": "HtmlElement;readOnly}",
+    select$0: function(receiver) {
+      return receiver.select();
+    },
     $isElement: 1,
     $isInterceptor: 1,
     $isEventTarget: 1,
@@ -7427,6 +7458,13 @@ var dart = [
     },
     "%": "HTMLTableSectionElement"
   },
+  TextAreaElement: {
+    "^": "HtmlElement;readOnly}",
+    select$0: function(receiver) {
+      return receiver.select();
+    },
+    "%": "HTMLTextAreaElement"
+  },
   UIEvent: {
     "^": "Event;",
     "%": "CompositionEvent|FocusEvent|KeyboardEvent|SVGZoomEvent|TextEvent|TouchEvent;UIEvent"
@@ -7559,7 +7597,7 @@ var dart = [
       var classes, t1;
       classes = s.join$1(0, " ");
       for (t1 = this._elementIterable, t1 = t1.get$iterator(t1); t1.moveNext$0();)
-        J.set$className$x(t1._current, classes);
+        J.set$className$x(t1.__internal$_current, classes);
     },
     modify$1: function(f) {
       C.JSArray_methods.forEach$1(this._sets, new W._MultiElementCssClassSet_modify_closure(f));
@@ -7625,6 +7663,15 @@ var dart = [
       return t1;
     }
   },
+  EventStreamProvider: {
+    "^": "Object;_eventType",
+    forElement$2$useCapture: function(e, useCapture) {
+      return H.setRuntimeTypeInfo(new W._ElementEventStreamImpl(e, this._eventType, useCapture), [null]);
+    },
+    forElement$1: function(e) {
+      return this.forElement$2$useCapture(e, false);
+    }
+  },
   _EventStream: {
     "^": "Stream;_html$_target,_eventType,_useCapture",
     listen$4$cancelOnError$onDone$onError: function(onData, cancelOnError, onDone, onError) {
@@ -7633,9 +7680,15 @@ var dart = [
       t1._tryResume$0();
       return t1;
     },
+    listen$1: function(onData) {
+      return this.listen$4$cancelOnError$onDone$onError(onData, null, null, null);
+    },
     listen$3$onDone$onError: function(onData, onDone, onError) {
       return this.listen$4$cancelOnError$onDone$onError(onData, null, onDone, onError);
     }
+  },
+  _ElementEventStreamImpl: {
+    "^": "_EventStream;_html$_target,_eventType,_useCapture"
   },
   _ElementListEventStreamImpl: {
     "^": "Stream;_targetList,_useCapture,_eventType",
@@ -7644,7 +7697,7 @@ var dart = [
       pool = H.setRuntimeTypeInfo(new W._StreamPool(null, P.LinkedHashMap_LinkedHashMap(null, null, null, [P.Stream, null], [P.StreamSubscription, null])), [null]);
       pool._controller = P.StreamController_StreamController$broadcast(pool.get$close(pool), null, true, null);
       for (t1 = this._targetList, t1 = t1.get$iterator(t1), t2 = this._eventType, t3 = this._useCapture; t1.moveNext$0();) {
-        t4 = new W._EventStream(t1._current, t2, t3);
+        t4 = new W._EventStream(t1.__internal$_current, t2, t3);
         t4.$builtinTypeInfo = [null];
         pool.add$1(0, t4);
       }
@@ -7717,7 +7770,7 @@ var dart = [
     close$0: [function(_) {
       var t1, t2;
       for (t1 = this._subscriptions, t2 = t1.get$values(t1), t2 = H.setRuntimeTypeInfo(new H.MappedIterator(null, J.get$iterator$ax(t2._iterable), t2._f), [H.getTypeArgumentByIndex(t2, 0), H.getTypeArgumentByIndex(t2, 1)]); t2.moveNext$0();)
-        t2._current.cancel$0();
+        t2.__internal$_current.cancel$0();
       t1.clear$0(0);
       this._controller.close$0(0);
     }, "call$0", "get$close", 0, 0, 1]
@@ -7744,22 +7797,22 @@ var dart = [
     $isEfficientLength: 1
   },
   FixedSizeListIterator: {
-    "^": "Object;_array,_html$_length,_position,_html$_current",
+    "^": "Object;_array,_length,_position,_current",
     moveNext$0: function() {
       var nextPosition, t1;
       nextPosition = this._position + 1;
-      t1 = this._html$_length;
+      t1 = this._length;
       if (nextPosition < t1) {
-        this._html$_current = J.$index$asx(this._array, nextPosition);
+        this._current = J.$index$asx(this._array, nextPosition);
         this._position = nextPosition;
         return true;
       }
-      this._html$_current = null;
+      this._current = null;
       this._position = t1;
       return false;
     },
     get$current: function() {
-      return this._html$_current;
+      return this._current;
     }
   },
   _DOMWindowCrossFrame: {
@@ -8623,6 +8676,9 @@ J.get$target$x = function(receiver) {
 J.map$1$ax = function(receiver, a0) {
   return J.getInterceptor$ax(receiver).map$1(receiver, a0);
 };
+J.preventDefault$0$x = function(receiver) {
+  return J.getInterceptor$x(receiver).preventDefault$0(receiver);
+};
 J.querySelector$1$x = function(receiver, a0) {
   return J.getInterceptor$x(receiver).querySelector$1(receiver, a0);
 };
@@ -8637,6 +8693,9 @@ J.removeEventListener$3$x = function(receiver, a0, a1, a2) {
 };
 J.replaceWith$1$x = function(receiver, a0) {
   return J.getInterceptor$x(receiver).replaceWith$1(receiver, a0);
+};
+J.select$0$x = function(receiver) {
+  return J.getInterceptor$x(receiver).select$0(receiver);
 };
 J.set$className$x = function(receiver, value) {
   return J.getInterceptor$x(receiver).set$className(receiver, value);
@@ -8659,6 +8718,7 @@ C.C__DelayedDone = new P._DelayedDone();
 C.C__JSRandom = new P._JSRandom();
 C.C__RootZone = new P._RootZone();
 C.Duration_0 = new P.Duration(0);
+C.EventStreamProvider_copy = new W.EventStreamProvider("copy");
 C.JS_CONST_0 = function(hooks) {
   if (typeof dartExperimentalFixupGetTag != "function") return hooks;
   hooks.getTag = dartExperimentalFixupGetTag(hooks.getTag);
@@ -8935,8 +8995,13 @@ $.Device__cachedCssPrefix = null;
   var t1 = $.mainDimension;
   return H.setRuntimeTypeInfo(Array(t1 * t1), [F.PixelMap]);
 }, "markedMaps", "output", "get$output", function() {
-  var t1 = C.HtmlDocument_methods.createElement$1(W.document(), "textarea");
+  var t1, t2;
+  t1 = C.HtmlDocument_methods.createElement$1(W.document(), "textarea");
   t1.id = "output";
+  t2 = J.getInterceptor$x(t1);
+  t2.set$readOnly(t1, true);
+  t2.get$onMouseDown(t1).listen$1(new F.closure());
+  C.EventStreamProvider_copy.forElement$1(t1).listen$1(new F.closure0());
   return t1;
 }, "output", "_AsyncRun_scheduleImmediateClosure", "get$_AsyncRun_scheduleImmediateClosure", function() {
   return P._AsyncRun__initializeScheduleImmediate();
