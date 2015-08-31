@@ -12,7 +12,20 @@ part "lib/maps.dart";
 int mainDimension = 6;
 List<PixelMap> markedMaps = new List<PixelMap>(mainDimension * mainDimension);
 
-TextAreaElement output = new TextAreaElement()..id = "output";
+TextAreaElement output = new TextAreaElement()
+  ..id = "output"
+  ..readOnly = true
+  ..onMouseDown.listen((MouseEvent e) {
+    e.preventDefault();
+    output.select();
+  })
+  ..onCopy.listen((_) {
+    if (output.text.length > 0) {
+      // Copied
+    } else {
+      // Not copied
+    }
+  });
 
 void main() {
   generateGrid();
